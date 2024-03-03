@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,15 +35,13 @@ public class UserDB {
      * @param user the UserProfile object whose data is being added to the database
      */
     public void addNewUserProfile(UserProfile user) {       // TODO: NEED USER PROFILE CLASS
-        HashMap<String, String> data = new HashMap<>();
-        data.put("Contact", user.getContactInfo());         // TODO: REPLACE "getContactInfo" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+        HashMap<String, String> data = user.getData();         // TODO: REPLACE "getData" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
         usersRef
-                .document(user.getUserName())               // TODO: REPLACE "getUserName" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written");
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("Firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -51,15 +50,16 @@ public class UserDB {
                         Log.d("Firestore", "DocumentSnapshot writing failed");
                     }
                 });
+
     }
 
     /**
-     * Removes a user from UserProfiles collection of the database by their userName
-     * @param userName the userName of the user to be removed
+     * Removes a user from UserProfiles collection of the database by their UID
+     * @param UID the UID of the user to be removed
      */
-    public void deleteUserProfile(String userName) {
+    public void deleteUserProfile(String UID) {
         usersRef
-                .document(userName)
+                .document(UID)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -77,12 +77,12 @@ public class UserDB {
 
     /**
      * Removes a user from UserProfiles collection of the database by their userProfile object
-     * @param user the UserProfile object whose userName is that of the user to be removed
+     * @param user the UserProfile object whose UID is that of the user to be removed
      */
     public void deleteUserProfile(UserProfile user) {       // TODO: NEED USER PROFILE CLASS
-        String userName = user.getUserName();               // TODO: REPLACE "getUserName" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+        String UID = user.getUID();               // TODO: REPLACE "getUID" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
         usersRef
-                .document(userName)
+                .document(UID)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -100,13 +100,13 @@ public class UserDB {
 
     /**
      * One time get info for a particular UserProfile
-     * @param userName the String userName of the UserProfile whose information is to be collected
+     * @param UID the String userName of the UserProfile whose information is to be collected
      * @return the UserProfile object with all fields filled in as seen currently in the database
      */
-    public UserProfile getUserInfo(String userName) {       // TODO: NEED USER PROFILE CLASS
+    public UserProfile getUserInfo(String UID) {       // TODO: NEED USER PROFILE CLASS
         UserProfile returnUser = new UserProfile();         // TODO: NEED USER PROFILE CLASS
         // The following was adapted from the firebase documentation:
-        usersRef.document(userName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -114,11 +114,9 @@ public class UserDB {
                     if (document.exists()) {
                         Map<String, Object> documentData = document.getData();
                         Log.d("Firestore", "DocumentSnapshot data: " + documentData);
-                        try {
-                            returnUser.setContactInfo(documentData.get("Contact"));         // TODO: NEED TO REPLACE "setContactInfo" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
-                        } catch (NullPointerException e) {
-                            returnUser.setContactInfo("N/A");                               // TODO: NEED TO REPLACE "setContactInfo" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
-                        }
+
+                        returnUser.setData(documentData);         // TODO: NEED TO REPLACE "setData" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+
                     } else {
                         Log.d("Firestore", "No such document for get");
                     }
@@ -136,10 +134,9 @@ public class UserDB {
      * @param user the UserProfile object whose data is being added to the database
      */
     public void editUserProfile(UserProfile user) {         // TODO: NEED USER PROFILE CLASS
-        HashMap<String, String> data = new HashMap<>();
-        data.put("Contact", user.getContactInfo());         // TODO: REPLACE "getContactInfo" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+        HashMap<String, String> data = user.getData();       // TODO: REPLACE "getContactInfo" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
         usersRef
-                .document(user.getUserName())               // TODO: REPLACE "getUserName" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+                .document(user.getUID())               // TODO: REPLACE "getUID" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
