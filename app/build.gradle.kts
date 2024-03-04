@@ -37,8 +37,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
 
+    //ML Kit Android libraries
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
     // CameraX core library
     implementation("androidx.camera:camera-core:1.3.1")
     // CameraX Camera2 implementation
