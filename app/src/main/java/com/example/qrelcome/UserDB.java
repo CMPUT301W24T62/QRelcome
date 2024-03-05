@@ -34,14 +34,15 @@ public class UserDB {
      * Adds a new userProfile to the database using info from a provided UserProfile object
      * @param user the UserProfile object whose data is being added to the database
      */
-    public void addNewUserProfile(UserProfile user) {       // TODO: NEED USER PROFILE CLASS
-        HashMap<String, String> data = user.getData();         // TODO: REPLACE "getData" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+    public void addNewUserProfile(UserProfile user) {
+        HashMap<String, Object> data = user.getData();
         usersRef
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(user.getUIDString())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("Firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "DocumentSnapshot written with ID: ");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -79,8 +80,8 @@ public class UserDB {
      * Removes a user from UserProfiles collection of the database by their userProfile object
      * @param user the UserProfile object whose UID is that of the user to be removed
      */
-    public void deleteUserProfile(UserProfile user) {       // TODO: NEED USER PROFILE CLASS
-        String UID = user.getUID();               // TODO: REPLACE "getUID" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+    public void deleteUserProfile(UserProfile user) {
+        String UID = user.getUIDString();
         usersRef
                 .document(UID)
                 .delete()
@@ -103,8 +104,8 @@ public class UserDB {
      * @param UID the String userName of the UserProfile whose information is to be collected
      * @return the UserProfile object with all fields filled in as seen currently in the database
      */
-    public UserProfile getUserInfo(String UID) {       // TODO: NEED USER PROFILE CLASS
-        UserProfile returnUser = new UserProfile();         // TODO: NEED USER PROFILE CLASS
+    public UserProfile getUserInfo(String UID) {
+        UserProfile returnUser = new UserProfile();
         // The following was adapted from the firebase documentation:
         usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -115,7 +116,8 @@ public class UserDB {
                         Map<String, Object> documentData = document.getData();
                         Log.d("Firestore", "DocumentSnapshot data: " + documentData);
 
-                        returnUser.setData(documentData);         // TODO: NEED TO REPLACE "setData" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+                        assert documentData != null;
+                        returnUser.setData(documentData);
 
                     } else {
                         Log.d("Firestore", "No such document for get");
@@ -133,10 +135,10 @@ public class UserDB {
      * This method behaves identically to AddNewUserProfile but just has a modified method name
      * @param user the UserProfile object whose data is being added to the database
      */
-    public void editUserProfile(UserProfile user) {         // TODO: NEED USER PROFILE CLASS
-        HashMap<String, String> data = user.getData();       // TODO: REPLACE "getContactInfo" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+    public void editUserProfile(UserProfile user) {
+        HashMap<String, Object> data = user.getData();
         usersRef
-                .document(user.getUID())               // TODO: REPLACE "getUID" WITH APPROPRIATE METHOD FROM USERPROFILE CLASS
+                .document(user.getUIDString())
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

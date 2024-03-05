@@ -19,6 +19,9 @@ import com.example.qrelcome.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
