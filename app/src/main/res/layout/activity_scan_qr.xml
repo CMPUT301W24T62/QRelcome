@@ -3,28 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context = ".QRCodeScanner"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/scan_qr_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/preview_view"/>
-
-    <TextView
-        android:id="@+id/attendee_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ATTENDEE"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/scan_qr_toolbar"
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_attendee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,13 +18,16 @@
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/scan_qr_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/include"
         app:layout_constraintBottom_toTopOf="@id/button_scan"/>
 
     <Button
         android:id="@+id/button_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:backgroundTint="@android:color/holo_purple"
         app:layout_constraintTop_toBottomOf="@+id/preview_view"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="SCAN" />
