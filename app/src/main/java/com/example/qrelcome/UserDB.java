@@ -35,14 +35,14 @@ public class UserDB {
      * @param user the UserProfile object whose data is being added to the database
      */
     public void addNewUserProfile(UserProfile user) {
-        HashMap<String, Object> data = user.getData();
+        Map<String, Object> data = user.getData();
         usersRef
-                //.document(user.getUIDString())
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(user.getUIDString())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference doc) {
-                        Log.d("Firestore", "DocumentSnapshot written with ID: " + doc);
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "DocumentSnapshot written with ID: ");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -136,7 +136,7 @@ public class UserDB {
      * @param user the UserProfile object whose data is being added to the database
      */
     public void editUserProfile(UserProfile user) {
-        HashMap<String, Object> data = user.getData();
+        Map<String, Object> data = user.getData();
         usersRef
                 .document(user.getUIDString())
                 .set(data)

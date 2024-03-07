@@ -20,7 +20,7 @@ public class UserProfile {
      * Collects the user data for a specific UserProfile object and returns it within a hashmap
      * @return the hashmap with the UserProfile object's information
      */
-    public HashMap<String, Object> getData() {
+    public Map<String, Object> getData() {
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put("contact", this.contact);
         hashMap.put("name", this.name);
