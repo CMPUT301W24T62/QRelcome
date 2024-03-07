@@ -13,12 +13,18 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
@@ -42,6 +48,9 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     private ProcessCameraProvider cameraProvider;
     private Preview previewUseCase;
     private ImageAnalysis analysisUseCase;
+    //UserActivity user;
+    //UserProfile profile;
+    //EventDB event;
 
     /**
      * This sets the <code>ContentView</code>, <code>previewView</code> and
@@ -66,6 +75,7 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
+        //user.SetDefaultUser();
         startCamera();
     }
 
@@ -223,11 +233,12 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
                 image.getImageInfo().getRotationDegrees()
         );
 
-        BarcodeScannerOptions options = new BarcodeScannerOptions.Builder()
-                .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-                .build();
+        //If we need to scan QR Codes only
+        //BarcodeScannerOptions options = new BarcodeScannerOptions.Builder()
+        //        .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+        //        .build();
 
-        BarcodeScanner QRScanner = BarcodeScanning.getClient(options);
+        BarcodeScanner QRScanner = BarcodeScanning.getClient();
 
         QRScanner.process(inputImage)
                 .addOnSuccessListener(this::onSuccess)
@@ -241,8 +252,30 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
      */
     private void onSuccess(List<Barcode> qrcodes) {            //TODO: Return raw value of QR Code
         if (qrcodes.size() > 0) {
-            Toast.makeText(this, qrcodes.get(0).getRawValue(), Toast.LENGTH_SHORT)
-                    .show();
+            String qrCodeData = qrcodes.get(0).getRawValue();
+            Type type = new TypeToken<Map<String, String>>() {}.getType();
+            Map<String, String> data = new Gson().fromJson(qrCodeData, type);
+            String code = data.get("CODE");
+            switch (code){
+                case "CHECK-IN":
+                    //String name = profile.getName();
+                    String event_id = data.get("ID");
+                    //event.AddCheckin(event_id, name);
+                    Toast.makeText(this, "Checked-in "+event_id, Toast.LENGTH_SHORT).show();
+                    break;
+                case "PROMO":
+                    Toast.makeText(this, "Promo", Toast.LENGTH_SHORT).show();
+                    break;
+                case "QRelcome-ADMIN":
+                    //profile.setAdmin(true);
+                    //user.ChangeRole();
+                    Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(QRCodeScanner.this, UserActivity.class);
+                    startActivity(intent);
+                    break;
+                default:
+                    System.out.println("Unknown QRCode");
+            }
         }
     }
 
@@ -256,4 +289,3 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     }
 
 }
-
