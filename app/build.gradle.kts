@@ -48,6 +48,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.1")
     // CameraX View implementation
     implementation("androidx.camera:camera-view:1.3.1")
+    //Zxing library
+    implementation("com.google.zxing:core:3.4.1")
     //implement gson
     implementation("com.google.code.gson:gson:2.8.8")
 
