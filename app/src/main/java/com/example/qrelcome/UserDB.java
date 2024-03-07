@@ -37,12 +37,12 @@ public class UserDB {
     public void addNewUserProfile(UserProfile user) {
         HashMap<String, Object> data = user.getData();
         usersRef
-                .document(user.getUIDString())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                //.document(user.getUIDString())
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("Firestore", "DocumentSnapshot written with ID: ");
+                    public void onSuccess(DocumentReference doc) {
+                        Log.d("Firestore", "DocumentSnapshot written with ID: " + doc);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
