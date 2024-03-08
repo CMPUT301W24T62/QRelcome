@@ -80,8 +80,8 @@ public class FirstFragment extends Fragment {
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Event event = new Event("TEST 123", "Description", date, new GeoPoint(0,0));
-                event.setEID(db.addNewEvent(event));
+                Event event = new Event("TEST 123", "Description", "this is a random Date", "this is a random location");
+                db.addNewEvent(event);
                 Log.d("FirstFragment", "event id " + event.getEID());
                 event.addCheckIn("ThisIsATestUid");
 

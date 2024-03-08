@@ -31,29 +31,25 @@ public class EventDB {
      * Adds a new Event to the database using info from a provided EventCreator object
      *
      * @param event the EventCreator object whose data is being added to the database
-     * @return
      */
-    public String addNewEvent(Event event) {       // TODO: NEED EventCreator CLASS
+    public void addNewEvent(Event event) {       // TODO: NEED EventCreator CLASS
         HashMap<String, Object> data = event.getEventData(); // Get event details in hashmap form //TODO: create appropriate class in EventCreator class
-        final String[] EID = new String[1];
-        eventsRef
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        EID[0] = documentReference.getId();
-                        Log.d("Firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
 
+        eventsRef.document(event.getEID())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "Successfully created new document");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", "DocumentSnapshot writing failed");
+                        Log.d("Firestore", "Failed to make new Document");
                     }
                 });
 
-        return EID[0];
     }
 
 
