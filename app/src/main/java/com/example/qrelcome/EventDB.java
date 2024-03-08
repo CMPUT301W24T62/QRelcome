@@ -8,12 +8,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,24 +29,24 @@ public class EventDB {
 
     /**
      * Adds a new Event to the database using info from a provided EventCreator object
+     *
      * @param event the EventCreator object whose data is being added to the database
      */
     public void addNewEvent(Event event) {       // TODO: NEED EventCreator CLASS
         HashMap<String, Object> data = event.getEventData(); // Get event details in hashmap form //TODO: create appropriate class in EventCreator class
 
-        eventsRef
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        eventsRef.document(event.getEID())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("Firestore", "DocumentSnapshot written with ID: " + documentReference.getId());
-                        event.setEID(documentReference.getId());
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "Successfully created new document");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", "DocumentSnapshot writing failed");
+                        Log.d("Firestore", "Failed to make new Document");
                     }
                 });
 
@@ -115,25 +113,23 @@ public class EventDB {
      *
      * @param event the EventsManager object whose data is being added to the database
      */
-//    public void editEvent(Event event) {
-//        HashMap<String, Object> data = event.getEventData();
-//        eventsRef
-//                .document(event.getEID())
-//                .set(data)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d("Firestore", "DocumentSnapshot Edited with ID: " + documentReference.getId() );
-//
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d("Firestore", "DocumentSnapshot Edit Failed");
-//                    }
-//                });
-//    }
+    public void editEvent(Event event) {
+        HashMap<String, Object> data = event.getEventData();
+        eventsRef
+                .document(event.getEID())
+                .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "Successfuly Updated Event Data" + event.getEID());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", "Failed to Update Event Data" + event.getEID());
+                    }
+                });
+    }
 
     public void test(){
         eventsRef.add(new HashMap<String,Object>());
