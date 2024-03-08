@@ -10,9 +10,9 @@ public class Event {
     private String EID;
     private String title;
     private String desc;
-    private java.util.Date dateTime;
+    private String dateTime;
 
-    private GeoPoint location;
+    private String location;
 
     public Event(){
 
@@ -20,7 +20,7 @@ public class Event {
 
     }
 
-    public Event(String title, String description, java.util.Date date, GeoPoint l){
+    public Event(String title, String description, String date, String l){
         this.title = title;
         this.desc = description;
         this.dateTime= date;
@@ -40,10 +40,10 @@ public class Event {
     }
 
     public void setEventData(Map<String ,Object> data){
-        this.location = (GeoPoint) data.get("location");
+        this.location = (String) data.get("location");
         this.desc = (String) data.get("description");
         this.title = (String) data.get("title");
-        this.dateTime = (java.util.Date) data.get("DateTime");
+        this.dateTime = (String) data.get("DateTime");
         this.EID = (String) data.get("documentID");
 
     }
@@ -73,19 +73,19 @@ public class Event {
         this.desc = desc;
     }
 
-    public java.util.Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(java.util.Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
-    public GeoPoint getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(GeoPoint location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 }

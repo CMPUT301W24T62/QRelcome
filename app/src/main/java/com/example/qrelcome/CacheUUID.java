@@ -36,6 +36,14 @@ public class CacheUUID {
         }
         return getUUIDFromFile(context);
     }
+
+    public static UUID getUUIDStored() {
+        if (gottenUUID) {
+            return uuid;
+        } else {
+            return null;
+        }
+    }
     private static UUID getUUIDFromFile(Context context) {
         try {
             File cacheDir = new File(context.getCacheDir(), "uuid");

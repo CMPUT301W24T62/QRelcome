@@ -267,10 +267,10 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this, "Promo", Toast.LENGTH_SHORT).show();
                     break;
                 case "QRelcome-ADMIN":
-                    //profile.setAdmin(true);
-                    //user.ChangeRole();
+                    UserProfile user = new UserProfile();
+                    user.enableAdmin();
                     Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(QRCodeScanner.this, UserActivity.class);
+                    Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
                     startActivity(intent);
                     break;
                 default:
