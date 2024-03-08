@@ -40,6 +40,9 @@ public class EventDetailsScreen extends AppCompatActivity {
     private LayoutInflater layoutInflater;
     private ArrayList<String> MilestoneResult;
 
+    public Event event;
+    public EventDB db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,8 +134,6 @@ public class EventDetailsScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(EventDetailsScreen.this, "You clicked on the create promo QR code", Toast.LENGTH_SHORT).show();
                 finish();
-                Intent intent = new Intent(EventDetailsScreen.this, CreateNewEventScreen.class);
-                startActivity(intent);
 
             }
         });
@@ -151,9 +152,13 @@ public class EventDetailsScreen extends AppCompatActivity {
                 editor.putString(EVENT_DESCRIPTION_KEY, enteredEventDescription);
                 editor.apply();
 
+                Event event = new Event(enteredEventName, enteredEventDescription, enteredEventDateTime, enteredEventLocation);
+                event.setEID(db.addNewEvent(event));
+
 
                 Toast.makeText(EventDetailsScreen.this, "You clicked to Confirm the details", Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent(EventDetailsScreen.this, CreateNewEventScreen.class);
+                startActivity(intent);
             }
         });
 

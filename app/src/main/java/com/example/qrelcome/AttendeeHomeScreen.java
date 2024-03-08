@@ -13,25 +13,23 @@ import android.widget.Toast;
 
 public class AttendeeHomeScreen extends AppCompatActivity {
 
-    //UserActivity default_user;
+    private UserProfile user;
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //default_user.SetDefaultUser();
-
+        user = new UserProfile();
         setContentView(R.layout.homescreen_attendee);
         //CheckAdmin();
-        /**
-        Toolbar toolbar;
-        if(default_user.getAdmin()){
+
+        if(user.getIsAdmin()){
             toolbar = findViewById(R.id.admin_toolbar);
         }else{
             toolbar = findViewById(R.id.default_toolbar);
         }
         setSupportActionBar(toolbar);
-         **/
 
         ImageView MenuIcon = findViewById(R.id.menu_attendee);
         ImageView ProfileIcon = findViewById(R.id.profile_icon);

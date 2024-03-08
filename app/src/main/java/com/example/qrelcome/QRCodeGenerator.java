@@ -20,7 +20,7 @@ import java.util.Map;
 public class QRCodeGenerator extends AppCompatActivity {
 
     //Event event;
-    QRCodeInfo qr_code_info;
+    //QRCodeInfo qr_code_info;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

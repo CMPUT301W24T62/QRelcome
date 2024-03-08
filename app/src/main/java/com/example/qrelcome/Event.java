@@ -11,11 +11,9 @@ public class Event {
     private String title;
     private String desc;
     private String dateTime;
-
     private String location;
 
     private HashMap<String, Integer> attendance;
-
 
     public Event(){
 

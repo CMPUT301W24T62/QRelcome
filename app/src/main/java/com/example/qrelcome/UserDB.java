@@ -121,6 +121,17 @@ public class UserDB {
 
                     } else {
                         Log.d("Firestore", "No such document for get");
+
+
+                        Map<String, Object> map = new HashMap<String, Object>();
+                        map.put("contact", "");
+                        map.put("name", "");
+                        map.put("imageLink", "");
+                        map.put("homepage", "");
+                        map.put("geolocationOn", "false");
+                        map.put("isAdmin", "false");
+
+                        returnUser.setData(map);
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());

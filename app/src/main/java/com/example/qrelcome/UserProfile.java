@@ -19,20 +19,10 @@ public class UserProfile {
 
     public UserProfile() {
 
-        //this.uuid = CacheUUID.getUUID(); TODO: UNCOMMENT ONCE CacheUUID CLASS ADDED
-        this.uuid = UUID.randomUUID();
-        // TODO: ADD A GET INFO FROM UserDB
+        this.uuid = CacheUUID.getUUIDStored();
+        UserDB db = new UserDB();
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("contact", "");
-        map.put("name", this.uuid.toString());
-        map.put("imageLink", "");
-        map.put("homepage", "");
-        map.put("geolocationOn", "false");
-        map.put("isAdmin", "false");
-
-
-        this.setData(map);
+        this.setData(db.getUserInfo(this.getUIDString()).getData());
     }
 
     /**
@@ -143,7 +133,7 @@ public class UserProfile {
     }
 
     /**
-     * Sets GeolocationOn to False, thereby disabling Geolocation for this userProfile
+     * Sets Admin to False, thereby disabling Geolocation for this userProfile
      */
     public void disableAdmin() {
         this.isAdmin = false;
@@ -151,7 +141,7 @@ public class UserProfile {
     }
 
     /**
-     * Sets GeolocationOn to True for this user profile object
+     * Sets Admin to True for this user profile object
      */
     public void enableAdmin() {
         this.isAdmin = true;
