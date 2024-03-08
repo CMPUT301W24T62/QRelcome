@@ -43,9 +43,6 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
 
 
-                UserProfile user = new UserProfile();
-                user.setUuid(UUID.randomUUID());
-
                 UserProfile testUser = new UserProfile();
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("contact", "apple@apple.com");
@@ -53,6 +50,7 @@ public class FirstFragment extends Fragment {
                 map.put("imageLink", "https://firebasestorage.googleapis.com/v0/b/qrelcome.appspot.com/o/steve.jpg?alt=media&token=8b6cbf0e-774a-4696-a354-420b7eabf40e");
                 map.put("homepage", "apple.com");
                 map.put("geolocationOn", "true");
+                map.put("isAdmin", "false");
 
                 testUser.setData(map);
                 testUser.setUuid(UUID.randomUUID());

@@ -15,6 +15,25 @@ public class UserProfile {
     private String imageLink; // stores the link to the image within the "storage" database in firebase
     private String homepage;
     private Boolean geolocationOn;
+    private Boolean isAdmin;
+
+    public UserProfile() {
+
+        //this.uuid = CacheUUID.getUUID(); TODO: UNCOMMENT ONCE CacheUUID CLASS ADDED
+        this.uuid = UUID.randomUUID();
+        // TODO: ADD A GET INFO FROM UserDB
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("contact", "");
+        map.put("name", this.uuid.toString());
+        map.put("imageLink", "");
+        map.put("homepage", "");
+        map.put("geolocationOn", "false");
+        map.put("isAdmin", "false");
+
+
+        this.setData(map);
+    }
 
     /**
      * Collects the user data for a specific UserProfile object and returns it within a hashmap
@@ -27,6 +46,7 @@ public class UserProfile {
         hashMap.put("imageLink", this.imageLink);
         hashMap.put("homepage", this.homepage);
         hashMap.put("geolocationOn", this.geolocationOn);
+        hashMap.put("isAdmin", this.isAdmin);
         return hashMap;
     }
 
@@ -40,6 +60,7 @@ public class UserProfile {
         this.imageLink = String.valueOf(data.get("imageLink"));
         this.homepage = String.valueOf(data.get("homepage"));
         this.geolocationOn = Boolean.valueOf(String.valueOf(data.get("geolocationOn")));
+        this.isAdmin = Boolean.valueOf(String.valueOf(data.get("isAdmin")));
     }
 
 
@@ -66,6 +87,9 @@ public class UserProfile {
     }
     public Boolean getGeolocationOn() {
         return geolocationOn;
+    }
+    public Boolean getIsAdmin() {
+        return isAdmin;
     }
 
 
@@ -109,6 +133,28 @@ public class UserProfile {
      */
     public void enableGeolocation() {
         this.geolocationOn = true;
+        updateDB();
+    }
+
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+        updateDB();
+    }
+
+    /**
+     * Sets GeolocationOn to False, thereby disabling Geolocation for this userProfile
+     */
+    public void disableAdmin() {
+        this.isAdmin = false;
+        updateDB();
+    }
+
+    /**
+     * Sets GeolocationOn to True for this user profile object
+     */
+    public void enableAdmin() {
+        this.isAdmin = true;
         updateDB();
     }
 

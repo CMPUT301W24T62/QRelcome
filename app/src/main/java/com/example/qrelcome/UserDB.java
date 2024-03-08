@@ -42,7 +42,7 @@ public class UserDB {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d("Firestore", "DocumentSnapshot written with ID: ");
+                        Log.d("Firestore", "DocumentSnapshot written with ID: " + user.getUIDString());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
