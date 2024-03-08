@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_purple">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Left_Icon"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_menu_24"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="16dp"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:id="@+id/Toolbar_Title"
+            android:layout_centerVertical="true"
+            android:text="Organizer" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/Right_Icon"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_attribution_24"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -12,24 +12,34 @@
         android:padding="16dp">
 
         <Button
-            android:id="@+id/button_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/next"
-            app:layout_constraintBottom_toTopOf="@id/textview_first"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/createEventButton"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="44dp"
+            android:text="Create Event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pickTimeButton" />
+
+        <Button
+            android:id="@+id/pickDateButton"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="240dp"
+            android:text="Pick Date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textview_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/lorem_ipsum"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <Button
+            android:id="@+id/pickTimeButton"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="56dp"
+            android:text="Pick Time"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_first" />
+            app:layout_constraintTop_toBottomOf="@+id/pickDateButton" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
