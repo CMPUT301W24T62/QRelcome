@@ -32,7 +32,7 @@ public class CreateNewEventScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(CreateNewEventScreen.this, "You clicked on NewQR Button", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CreateNewEventScreen.this, EventDetailsScreen.class);
+                Intent intent = new Intent(CreateNewEventScreen.this, EventPageScreen.class);
                 startActivity(intent);
             }
         });

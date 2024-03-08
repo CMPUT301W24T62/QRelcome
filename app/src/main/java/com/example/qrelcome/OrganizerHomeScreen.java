@@ -37,7 +37,7 @@ public class OrganizerHomeScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(OrganizerHomeScreen.this, "You clicked to create a new event", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(OrganizerHomeScreen.this, CreateNewEventScreen.class);
+                Intent intent = new Intent(OrganizerHomeScreen.this, EventDetailsScreen.class);
                 startActivity(intent);
             }
         });
