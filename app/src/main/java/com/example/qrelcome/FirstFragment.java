@@ -3,6 +3,7 @@ package com.example.qrelcome;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.qrelcome.databinding.FragmentFirstBinding;
+
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
@@ -29,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
+
 public class FirstFragment extends Fragment {
     public Event event;
     public EventDB db;
@@ -36,6 +39,8 @@ public class FirstFragment extends Fragment {
     public Button pickTimeButton;
     public  Button createEventButton;
 
+    private FirebaseFirestore db;
+    private CollectionReference usersRef;
     private FragmentFirstBinding binding;
 
     private Date date;
@@ -47,7 +52,6 @@ public class FirstFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -78,8 +82,10 @@ public class FirstFragment extends Fragment {
 
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
                 db.addNewEvent(new Event("TEST 123", "Description", date, new GeoPoint(0,0)));
+
             }
         });
 
