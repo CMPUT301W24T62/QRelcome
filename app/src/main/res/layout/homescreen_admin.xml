@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".AdminHomeScreen">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +14,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Left_Icon"
+            android:id="@+id/Menu_Dropdown"
             android:layout_centerVertical="true"
             android:src="@drawable/baseline_menu_24"/>
 
@@ -30,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:id="@+id/Right_Icon"
+            android:id="@+id/Profile_Icon"
             android:layout_centerVertical="true"
             android:src="@drawable/baseline_attribution_24"/>
 
@@ -38,18 +40,21 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/Profiles_Button"
         android:layout_marginTop="100dp"
         android:text="Profiles"
         android:textSize="30sp" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/Events_Button"
         android:layout_marginTop="100dp"
         android:text="Events"
         android:textSize="30sp" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/Images_Button"
         android:layout_marginTop="100dp"
         android:text="Images"
         android:textSize="30sp" />
