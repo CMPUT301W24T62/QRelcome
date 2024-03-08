@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.qrelcome.databinding.FragmentFirstBinding;
+
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
@@ -30,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
+
 public class FirstFragment extends Fragment {
     public Event event;
     public EventDB db;
@@ -37,6 +39,8 @@ public class FirstFragment extends Fragment {
     public Button pickTimeButton;
     public  Button createEventButton;
 
+    private FirebaseFirestore db;
+    private CollectionReference usersRef;
     private FragmentFirstBinding binding;
 
     private Date date;
@@ -48,7 +52,6 @@ public class FirstFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -79,11 +82,15 @@ public class FirstFragment extends Fragment {
 
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
+
                 Event event = new Event("TEST 123", "Description", "this is a random Date", "this is a random location");
                 db.addNewEvent(event);
                 Log.d("FirstFragment", "event id " + event.getEID());
                 event.addCheckIn("ThisIsATestUid");
+                
+
 
             }
         });

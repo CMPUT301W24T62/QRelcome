@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_purple">
+
+    <Button
+        android:id="@+id/button_attendee_profile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_organizer_profile"
+        app:cornerRadius="0dp"
+        android:backgroundTint="@android:color/holo_purple"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="Switch to \n ATTENDEE"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <Button
+        android:id="@+id/button_organizer_profile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toStartOf="@id/button_admin_profile"
+        app:layout_constraintStart_toEndOf="@id/button_attendee_profile"
+        android:textStyle="bold"
+        android:text="Switch to \n ORGANIZER"
+        app:cornerRadius="0dp"
+        tools:layout_editor_absoluteX="246dp"
+        tools:layout_editor_absoluteY="-1dp" />
+
+    <Button
+        android:id="@+id/button_admin_profile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_organizer_profile"
+        android:backgroundTint="@android:color/holo_purple"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="Switch to \n ADMIN"
+        app:cornerRadius="0dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

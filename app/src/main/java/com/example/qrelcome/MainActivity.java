@@ -6,6 +6,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.WindowCompat;
@@ -18,6 +19,12 @@ import com.example.qrelcome.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.io.File;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        CacheUUID.getUUID(getApplicationContext());
     }
 
     @Override
