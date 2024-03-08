@@ -84,7 +84,13 @@ public class FirstFragment extends Fragment {
             @Override
 
             public void onClick(View v) {
-                db.addNewEvent(new Event("TEST 123", "Description", date, new GeoPoint(0,0)));
+
+                Event event = new Event("TEST 123", "Description", "this is a random Date", "this is a random location");
+                db.addNewEvent(event);
+                Log.d("FirstFragment", "event id " + event.getEID());
+                event.addCheckIn("ThisIsATestUid");
+                
+
 
             }
         });
