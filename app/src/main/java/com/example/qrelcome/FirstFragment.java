@@ -3,6 +3,7 @@ package com.example.qrelcome;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,11 @@ public class FirstFragment extends Fragment {
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.addNewEvent(new Event("TEST 123", "Description", date, new GeoPoint(0,0)));
+                Event event = new Event("TEST 123", "Description", date, new GeoPoint(0,0));
+                event.setEID(db.addNewEvent(event));
+                Log.d("FirstFragment", "event id " + event.getEID());
+                event.addCheckIn("ThisIsATestUid");
+
             }
         });
 
