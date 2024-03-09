@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,25 +12,41 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.UUID;
+
 public class AttendeeHomeScreen extends AppCompatActivity {
 
+    String uid;
     private UserProfile user;
+    private UserDB user_db;
     public Toolbar toolbar;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        user = new UserProfile();
         setContentView(R.layout.homescreen_attendee);
-        //CheckAdmin();
+        Toast.makeText(AttendeeHomeScreen.this, "First time7", Toast.LENGTH_SHORT).show();
 
+        preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uuidString = preferences.getString("UUID", null);
+        if (uuidString != null) {
+            uid = uuidString;
+        };
+
+        user_db = new UserDB();
+        user = user_db.getUserInfo(uid);
+        Toast.makeText(AttendeeHomeScreen.this, "First time6", Toast.LENGTH_SHORT).show();
+
+        //CheckAdmin();
+        /**
         if(user.getIsAdmin()){
             toolbar = findViewById(R.id.admin_toolbar);
         }else{
             toolbar = findViewById(R.id.default_toolbar);
         }
         setSupportActionBar(toolbar);
+         **/
 
         ImageView MenuIcon = findViewById(R.id.menu_attendee);
         ImageView ProfileIcon = findViewById(R.id.profile_icon);
@@ -56,7 +73,7 @@ public class AttendeeHomeScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(AttendeeHomeScreen.this, "You clicked on Browse Events Button", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AttendeeHomeScreen.this, QRCodeGenerator.class);
+                Intent intent = new Intent(AttendeeHomeScreen.this, OrganizerHomeScreen.class);
                 startActivity(intent);
             }
         });

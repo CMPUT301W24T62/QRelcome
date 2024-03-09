@@ -14,7 +14,7 @@ public class OrganizerHomeScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.homescreen_organizer);
 
         ImageView LeftIcon = findViewById(R.id.Left_Icon);
         ImageView RightIcon = findViewById(R.id.Right_Icon);

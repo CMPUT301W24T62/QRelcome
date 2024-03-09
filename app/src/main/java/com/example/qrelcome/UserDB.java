@@ -24,6 +24,7 @@ import java.util.Map;
 public class UserDB {
     private FirebaseFirestore db;
     private CollectionReference usersRef;
+    private UserProfile returnUser;
 
     public UserDB() {
         db = FirebaseFirestore.getInstance();
@@ -37,12 +38,14 @@ public class UserDB {
     public void addNewUserProfile(UserProfile user) {
         Map<String, Object> data = user.getData();
         usersRef
-                .document(user.getUIDString())
+                //.document(user.getUIDString())
+                .document(user.getUID())
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d("Firestore", "DocumentSnapshot written with ID: " + user.getUIDString());
+                        //Log.d("Firestore", "DocumentSnapshot written with ID: " + user.getUIDString());
+                        Log.d("Firestore", "DocumentSnapshot written with ID: " + user.getUID());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -81,7 +84,8 @@ public class UserDB {
      * @param user the UserProfile object whose UID is that of the user to be removed
      */
     public void deleteUserProfile(UserProfile user) {
-        String UID = user.getUIDString();
+        //String UID = user.getUIDString();
+        String UID = user.getUID();
         usersRef
                 .document(UID)
                 .delete()
@@ -105,7 +109,6 @@ public class UserDB {
      * @return the UserProfile object with all fields filled in as seen currently in the database
      */
     public UserProfile getUserInfo(String UID) {
-        UserProfile returnUser = new UserProfile();
         // The following was adapted from the firebase documentation:
         usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -113,16 +116,25 @@ public class UserDB {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Map<String, Object> documentData = document.getData();
-                        Log.d("Firestore", "DocumentSnapshot data: " + documentData);
+                        //Map<String, Object> documentData = document.getData();
+                        String uuid = document.getId();
+                        String contact = document.getString("contact");
+                        String name = document.getString("name");
+                        String imageLink = document.getString("imageLink");
+                        String homepage = document.getString("homepage");
+                        Boolean geolocationOn = document.getBoolean("geolocationOn");
+                        Boolean isAdmin = document.getBoolean("isAdmin");
 
-                        assert documentData != null;
-                        returnUser.setData(documentData);
+                        Log.d("Firestore", "User Name: " + name + " fetched");
+
+                        returnUser = new UserProfile(uuid, contact, name, imageLink, homepage, geolocationOn, isAdmin);
+                        //assert documentData != null;
+                        //returnUser.setUserProfile(documentData);
 
                     } else {
                         Log.d("Firestore", "No such document for get");
 
-
+                        /**
                         Map<String, Object> map = new HashMap<String, Object>();
                         map.put("contact", "");
                         map.put("name", "");
@@ -132,6 +144,7 @@ public class UserDB {
                         map.put("isAdmin", "false");
 
                         returnUser.setData(map);
+                        **/
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
@@ -149,7 +162,8 @@ public class UserDB {
     public void editUserProfile(UserProfile user) {
         Map<String, Object> data = user.getData();
         usersRef
-                .document(user.getUIDString())
+                //.document(user.getUIDString())
+                .document(user.getUID())
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

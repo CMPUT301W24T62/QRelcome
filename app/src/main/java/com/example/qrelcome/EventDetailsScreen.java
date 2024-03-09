@@ -41,7 +41,7 @@ public class EventDetailsScreen extends AppCompatActivity {
     private ArrayList<String> MilestoneResult;
 
     public Event event;
-    public EventDB db;
+    public EventDB event_db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,8 @@ public class EventDetailsScreen extends AppCompatActivity {
         Button Confirm2 = inflatedView.findViewById(R.id.Confirm_Button2);
         MilestoneResult = new ArrayList<>();
         //Popup stuff end
+
+        event_db = new EventDB();
 
         EventName.setText(sharedPreferences.getString(EVENT_NAME_KEY, ""));
         EventName.setHint("Event Name:");
@@ -141,8 +143,8 @@ public class EventDetailsScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String enteredEventName = EventName.getText().toString().trim();
-                String enteredEventLocation = Location.getText().toString().trim();
-                String enteredEventDateTime = DateTime.getText().toString().trim();
+                String enteredEventLocation = Location.getText().toString().trim();         //TODO: Use GeoPoint datatype
+                String enteredEventDateTime = DateTime.getText().toString().trim();        //TODO: Use Date datatype
                 String enteredEventDescription = Description.getText().toString().trim();
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -153,11 +155,12 @@ public class EventDetailsScreen extends AppCompatActivity {
                 editor.apply();
 
                 Event event = new Event(enteredEventName, enteredEventDescription, enteredEventDateTime, enteredEventLocation);
-                event.setEID(db.addNewEvent(event));
-
+                event_db.addNewEvent(event);
+                String id = event.getEID();
 
                 Toast.makeText(EventDetailsScreen.this, "You clicked to Confirm the details", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(EventDetailsScreen.this, CreateNewEventScreen.class);
+                intent.putExtra("ID", id);
                 startActivity(intent);
             }
         });

@@ -1,8 +1,11 @@
 package com.example.qrelcome;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +23,8 @@ import java.util.UUID;
 public class CacheUUID {
     private static UUID uuid;
     private static boolean gottenUUID;
+    private UserProfile User;
+    private UserDB user_db;
 
     //public CacheUUID() {
     //    this.gottenUUID = false;
@@ -30,13 +35,16 @@ public class CacheUUID {
      * @param context the android context from which the app runs, to specify where the file can be collected from
      * @return the UUID, either new or from existing file
      */
+    //Redundant
     public static UUID getUUID(Context context) {
         if (gottenUUID) {
+            Toast.makeText(context, "Yayyy", Toast.LENGTH_SHORT).show();
             return uuid;
         }
         return getUUIDFromFile(context);
     }
 
+    //Redundant (Created by Allison on Pooja's computer)
     public static UUID getUUIDStored() {
         if (gottenUUID) {
             return uuid;
@@ -44,14 +52,22 @@ public class CacheUUID {
             return null;
         }
     }
-    private static UUID getUUIDFromFile(Context context) {
+    public static UUID getUUIDFromFile(Context context) {
+        File cacheDir = new File(context.getCacheDir(), "uuid");
         try {
-            File cacheDir = new File(context.getCacheDir(), "uuid");
+            //File cacheDir = new File(context.getCacheDir(), "uuid");
             if (!cacheDir.exists()) {
-                cacheDir = File.createTempFile("uuid", null, context.getCacheDir());
+                //cacheDir = File.createTempFile("uuid", null, context.getCacheDir());
                 FileWriter write = new FileWriter(cacheDir.getPath());
-                write.write(UUID.randomUUID().toString());
+                String uuid = UUID.randomUUID().toString();
+                write.write(uuid);
+                //write.write(UUID.randomUUID().toString());
                 write.close();
+                Toast.makeText(context, "First time1", Toast.LENGTH_SHORT).show();
+                //Sets first time user info
+                UserProfile user = new UserProfile(uuid, null, "User"+uuid, null, null, false, false);
+                UserDB user_db = new UserDB();
+                user_db.addNewUserProfile(user);
                 Toast.makeText(context, "First time", Toast.LENGTH_SHORT).show();
             }
             else {
@@ -61,6 +77,7 @@ public class CacheUUID {
             gottenUUID = true;
 
             String fileContents = new String(readFileToByteArray(cacheDir.getPath()));
+            Toast.makeText(context, fileContents, Toast.LENGTH_LONG).show();
             uuid = UUID.fromString(fileContents);
 
             return uuid;
@@ -99,4 +116,5 @@ public class CacheUUID {
 
         return byteArray;
     }
+
 }

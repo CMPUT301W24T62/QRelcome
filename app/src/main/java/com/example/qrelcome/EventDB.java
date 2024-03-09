@@ -1,6 +1,7 @@
 package com.example.qrelcome;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +22,8 @@ public class EventDB {
 
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
+    //private CollectionReference attendanceRef;
+    private Event returnEvent;
 
     public EventDB() {
         db = FirebaseFirestore.getInstance();
@@ -82,7 +85,7 @@ public class EventDB {
      * @return the EventsManager object with all fields filled in as seen currently in the database
      */
     public Event getEventInfo(String EID) {
-        Event returnEvent = new Event();
+        //Event returnEvent = new Event();
         // The following was adapted from the firebase documentation:
         eventsRef.document(EID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -91,11 +94,19 @@ public class EventDB {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Map<String, Object> documentData = document.getData();
+                        String eid = document.getId();
+                        String title = document.getString("Title");
+                        String desc = document.getString("Description");
+                        String dateTime = document.getString("DateTime");
+                        String location = document.getString("homepage");
+                        //TODO:Retrieve Attendance sub collection
 
-                        Log.d("Firestore", "DocumentSnapshot data: " + documentData);
-                        if (documentData != null) {
-                            returnEvent.setEventData(documentData);         // TODO: create setEventData() in EventsManager
-                        }
+                        returnEvent = new Event(title, desc, dateTime, location);
+
+                        Log.d("Firestore", "Event Name: " + title);
+                        //if (documentData != null) {
+                        //   returnEvent.setEventData(documentData);         // TODO: create setEventData() in EventsManager
+                        //}
 
                     } else {
                         Log.d("Firestore", "No such document for get");

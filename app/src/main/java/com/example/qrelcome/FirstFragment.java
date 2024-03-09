@@ -2,6 +2,7 @@ package com.example.qrelcome;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ import com.example.qrelcome.databinding.FragmentFirstBinding;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.type.DateTime;
 import com.google.type.DateTime.Builder;
@@ -39,7 +42,7 @@ public class FirstFragment extends Fragment {
     public Button pickTimeButton;
     public  Button createEventButton;
 
-    private FirebaseFirestore db;
+    private FirebaseFirestore db1;
     private CollectionReference usersRef;
     private FragmentFirstBinding binding;
 
@@ -76,7 +79,8 @@ public class FirstFragment extends Fragment {
         pickTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog();
+                Intent intent = new Intent(getActivity(), AttendeeHomeScreen.class);
+                startActivity(intent);
             }
         });
 

@@ -1,6 +1,9 @@
 package com.example.qrelcome;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +12,8 @@ import java.util.UUID;
 // W3schools (https://www.w3schools.com/java/java_hashmap.asp) consulted for a list of methods for HashMap class
 
 public class UserProfile {
-    private UUID uuid;
+    private String uuid;
+    //private UUID uuid1;
     private String contact;
     private String name;
     private String imageLink; // stores the link to the image within the "storage" database in firebase
@@ -17,13 +21,40 @@ public class UserProfile {
     private Boolean geolocationOn;
     private Boolean isAdmin;
 
+    /**
     public UserProfile() {
 
         this.uuid = CacheUUID.getUUIDStored();
         UserDB db = new UserDB();
 
-        this.setData(db.getUserInfo(this.getUIDString()).getData());
+        this.setUserData(db.getUserInfo(this.getUIDString()).getData());
     }
+     **/
+
+    public UserProfile(){
+
+    }
+
+    public UserProfile(String uuid, @Nullable String contact, String name, @Nullable String imageLink, @Nullable String homepage, Boolean geolocationOn, Boolean isAdmin){
+        this.uuid = uuid;
+        this.contact = contact;
+        this.name = name;
+        this.imageLink = imageLink;
+        this.homepage = homepage;
+        this.geolocationOn = geolocationOn;
+        this.isAdmin = isAdmin;
+    }
+
+    //I don't think we need this either, not sure. Don't delete
+    /**
+    public void setUserProfile(Context context){
+        this.uuid = CacheUUID.getUUIDFromFile(context).toString();
+        UserDB db = new UserDB();
+
+        this.setUserData(db.getUserInfo(this.getUIDString()).getData());
+    }
+     */
+
 
     /**
      * Collects the user data for a specific UserProfile object and returns it within a hashmap
@@ -31,6 +62,7 @@ public class UserProfile {
      */
     public Map<String, Object> getData() {
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("uuid", this.uuid);
         hashMap.put("contact", this.contact);
         hashMap.put("name", this.name);
         hashMap.put("imageLink", this.imageLink);
@@ -44,7 +76,7 @@ public class UserProfile {
      * Sets the UserProfile object's data to that provided in the map
      * @param data the map storing the information to be set as the user information
      */
-    public void setData(@NonNull Map<String, Object> data) {
+    public void setUserProfile(@NonNull Map<String, Object> data) {
         this.contact = String.valueOf(data.get("contact"));
         this.name = String.valueOf(data.get("name"));
         this.imageLink = String.valueOf(data.get("imageLink"));
@@ -52,7 +84,6 @@ public class UserProfile {
         this.geolocationOn = Boolean.valueOf(String.valueOf(data.get("geolocationOn")));
         this.isAdmin = Boolean.valueOf(String.valueOf(data.get("isAdmin")));
     }
-
 
     // GET FUNCTIONS
 
@@ -72,6 +103,7 @@ public class UserProfile {
         return homepage;
     }
 
+    //Redundant method
     public String getUIDString() {
         return uuid.toString();
     }
@@ -81,6 +113,8 @@ public class UserProfile {
     public Boolean getIsAdmin() {
         return isAdmin;
     }
+
+    public String getUID(){ return uuid;}
 
 
     // SET FUNCTIONS
@@ -126,7 +160,7 @@ public class UserProfile {
         updateDB();
     }
 
-
+    //Redundant method
     public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
         updateDB();
@@ -148,9 +182,8 @@ public class UserProfile {
         updateDB();
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
+    //public void setUuid(UUID uuid) {this.uuid = uuid;}
+    public void setUuid(String uuid) {this.uuid = uuid;}
 
 
     // UPDATE DATABASE FUNCTION

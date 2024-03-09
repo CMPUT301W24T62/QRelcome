@@ -1,6 +1,6 @@
 package com.example.qrelcome;
 
-import com.google.firebase.firestore.GeoPoint;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,21 +12,18 @@ public class Event {
     private String desc;
     private String dateTime;
     private String location;
-
     private HashMap<String, Integer> attendance;
 
     public Event(){
 
-
-
     }
 
-    public Event( String title, String description, String date, String l){
+    public Event(String title, String description, String date, String location){
         this.EID = UUID.randomUUID().toString();
         this.title = title;
         this.desc = description;
         this.dateTime= date;
-        this.location = l;
+        this.location = location;
         this.attendance = new HashMap<String, Integer>();
 
     }
@@ -44,14 +41,13 @@ public class Event {
 
     }
 
+    //Not necessary
     public void setEventData(Map<String ,Object> data){
         this.location = (String) data.get("location");
         this.desc = (String) data.get("description");
         this.title = (String) data.get("title");
         this.dateTime = (String) data.get("DateTime");
         this.EID = (String) data.get("documentID");
-
-
     }
 
 
@@ -100,6 +96,7 @@ public class Event {
         updateDB();
     }
 
+    public HashMap getAttendance() {return this.attendance;}
 
     public void addCheckIn(String UID){
         this.attendance.put(UID, (Integer)this.attendance.getOrDefault(UID, 0) + 1);
