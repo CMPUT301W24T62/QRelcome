@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +22,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.auth.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
@@ -48,6 +51,12 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     private ProcessCameraProvider cameraProvider;
     private Preview previewUseCase;
     private ImageAnalysis analysisUseCase;
+    String uid;
+    private UserProfile user;
+    private UserDB user_db;
+    private EventDB event_db;
+    private Event event;
+    private SharedPreferences preferences;
     //UserActivity user;
     //UserProfile profile;
     //EventDB event;
@@ -66,6 +75,8 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
         scanButton = findViewById(R.id.button_scan);
         scanButton.setOnClickListener(this);
         previewView = findViewById(R.id.preview_view);
+        user_db = new UserDB();
+        event_db = new EventDB();
     }
 
     /**
@@ -256,18 +267,36 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
             Type type = new TypeToken<Map<String, String>>() {}.getType();
             Map<String, String> data = new Gson().fromJson(qrCodeData, type);
             String code = data.get("CODE");
+            Toast.makeText(this, "Checked-in 1", Toast.LENGTH_SHORT).show();
+
+            preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            String uuidString = preferences.getString("UUID", null);
+            if (uuidString != null) {
+                uid = uuidString;
+            }
+            Toast.makeText(this, uid, Toast.LENGTH_SHORT).show();
+
             switch (code){
                 case "CHECK-IN":
-                    //String name = profile.getName();
+                    //String uid = user.getUIDString()
+                    Toast.makeText(this, "Checked-in 4", Toast.LENGTH_SHORT).show();
                     String event_id = data.get("ID");
-                    //event.AddCheckin(event_id, name);
-                    Toast.makeText(this, "Checked-in "+event_id, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, event_id, Toast.LENGTH_SHORT).show();
+                    Event event = event_db.getEventInfo(event_id);
+                    Toast.makeText(this, "Checked-in 6" , Toast.LENGTH_SHORT).show();
+                    String name = event.getTitle();
+                    Toast.makeText(this, "Checked-in 6"+name , Toast.LENGTH_LONG).show();
+                    event.addCheckIn(uid);
+                    Toast.makeText(this, "Checked-in "+ event_id, Toast.LENGTH_LONG).show();
+                    Intent intent_checkin = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
+                    Toast.makeText(this, "Checked-in 7", Toast.LENGTH_SHORT).show();
+                    startActivity(intent_checkin);
                     break;
                 case "PROMO":
                     Toast.makeText(this, "Promo", Toast.LENGTH_SHORT).show();
                     break;
                 case "QRelcome-ADMIN":
-                    UserProfile user = new UserProfile();
+                    user = user_db.getUserInfo(uid);
                     user.enableAdmin();
                     Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);

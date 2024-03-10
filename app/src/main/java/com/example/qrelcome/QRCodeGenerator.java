@@ -2,9 +2,13 @@ package com.example.qrelcome;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
@@ -26,12 +30,22 @@ public class QRCodeGenerator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_qr);
         ImageView qr_image = findViewById(R.id.qrImage);
+        Button save_qr = findViewById(R.id.save_qr_button);
 
-        //String id = event.GetID();
-        //String code = event.GetCode();
+        save_qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(QRCodeGenerator.this, "You clicked on Save Button", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(QRCodeGenerator.this, AttendeeHomeScreen.class);
+                startActivity(intent);    //TODO: Actually save the image
+            }
+        });
+
+        Intent intent1 = getIntent();
+        String id = intent1.getStringExtra("ID");
         HashMap<String, String> map = new HashMap<>();
-        map.put("CODE", "CHECK-IN"/**id**/);
-        map.put("ID", "h36eghs"/**code**/);
+        map.put("CODE", "CHECK-IN"/**code**/);
+        map.put("ID", id);
         String json_data = new Gson().toJson(map);
 
         Bitmap qrCodeBitmap = QRCodeGenerator.generateQRCode(json_data, 512, 512);

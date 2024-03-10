@@ -1,5 +1,7 @@
 package com.example.qrelcome;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +21,7 @@ import com.example.qrelcome.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
@@ -28,26 +31,30 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
+    private UUID uuid;
 
-
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    //private AppBarConfiguration appBarConfiguration;
+    //private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        //binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(R.layout.fragment_first);
+        Button createEvent = findViewById(R.id.createEventButton);
 
-        setSupportActionBar(binding.toolbar);
+        //setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //CacheUUID.getUUID(getApplicationContext());
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        //binding.fab.setOnClickListener(new View.OnClickListener() {
+            //@Override
+        /**
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAnchorView(R.id.fab)
@@ -56,10 +63,26 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+**/
+        uuid = CacheUUID.getUUIDFromFile(getApplicationContext());
 
-        CacheUUID.getUUID(getApplicationContext());
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("UUID", uuid.toString());
+        editor.apply();
+
+        createEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AttendeeHomeScreen.class);
+                startActivity(intent);
+            }
+        });
+        //Intent intent = new Intent(MainActivity.this, AttendeeHomeScreen.class);
+        //startActivity(intent);
     }
-
+}
+/**
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -88,4 +111,4 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-}
+    **/

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//TODO:Convert this screen to fragment
 public class CreateNewEventScreen extends AppCompatActivity {
 
     @Override
@@ -16,6 +17,8 @@ public class CreateNewEventScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_create_events);
 
+        Intent intent1 = getIntent();
+        String id_value = intent1.getStringExtra("ID");
         //TextView EventName = findViewById(R.id.Event_Name);
         ImageView Edit = findViewById(R.id.Edit);
         TextView NewQR = findViewById(R.id.New_QR);
@@ -33,6 +36,7 @@ public class CreateNewEventScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(CreateNewEventScreen.this, "You clicked on NewQR Button", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CreateNewEventScreen.this, QRCodeGenerator.class);
+                intent.putExtra("ID", id_value);
                 startActivity(intent);
             }
         });
