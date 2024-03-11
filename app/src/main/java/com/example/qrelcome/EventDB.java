@@ -1,9 +1,17 @@
 package com.example.qrelcome;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,17 +21,21 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.core.View;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class EventDB {
+public class EventDB extends Event {
 
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
     //private CollectionReference attendanceRef;
-    private Event returnEvent;
+    private Activity activity;
+    private Event returnEvent = new Event();
+    private Event event;
+    String title;
 
     public EventDB() {
         db = FirebaseFirestore.getInstance();
@@ -84,39 +96,67 @@ public class EventDB {
      * @param EID the String EOD of the Event whose information is to be collected
      * @return the EventsManager object with all fields filled in as seen currently in the database
      */
-    public Event getEventInfo(String EID) {
-        //Event returnEvent = new Event();
+    public void getEventInfo(String EID, LifecycleOwner lifecycleOwner) {
+        Event event = new Event();
         // The following was adapted from the firebase documentation:
-        eventsRef.document(EID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        //eventsRef.document(EID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        DocumentReference docRef = eventsRef.document(EID);
+        Log.d("Firestore", "EID data " + EID);
+        docRef.get().addOnCompleteListener(task -> {//new OnCompleteListener<DocumentSnapshot>() {
+            //@Override
+            //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    Log.d("Firestore", "DocumentSnapshot data: " + document);
                     if (document.exists()) {
-                        Map<String, Object> documentData = document.getData();
-                        String eid = document.getId();
-                        String title = document.getString("Title");
-                        String desc = document.getString("Description");
+                        //Map<String, Object> documentData = document.getData();
                         String dateTime = document.getString("DateTime");
-                        String location = document.getString("homepage");
-                        //TODO:Retrieve Attendance sub collection
+                        String description = document.getString("Description");
+                        String eid = document.getString("EID");
+                        String location = document.getString("Location");
+                        String title = document.getString("Title");
+                        HashMap<String, Integer> attendance = (HashMap<String, Integer>) document.get("Attendance");
+                        for (HashMap.Entry<String, Integer> entry : attendance.entrySet()) {
+                            String key = entry.getKey();
+                            Object value = entry.getValue();
+                        }
+                        Log.d("Firestore", "Title data: " + title);
+                        //event = document.toObject(Event.class);
+                        event.setEvent(title, description, dateTime, location, attendance);
+                        Log.d("Firestore", "Event data: " + event);
+                        EventViewModel eventViewModel = new ViewModelProvider((ViewModelStoreOwner) lifecycleOwner).get(EventViewModel.class);
+                        eventViewModel.setSharedEvent(event);
+                        Log.d("Firestore", "Shared data changed: " + event);
 
-                        returnEvent = new Event(title, desc, dateTime, location);
+                        //Log.d("Firestore", "DocumentSnapshot data: " + documentData);
+                        //returnEvent.setEventData(documentData);         // TODO: create setEventData() in EventsManager
 
-                        Log.d("Firestore", "Event Name: " + title);
-                        //if (documentData != null) {
-                        //   returnEvent.setEventData(documentData);         // TODO: create setEventData() in EventsManager
+                        //if (event!=null){
+                            //EventStorageSingleton.getEventInstance().setEvent(event);
+                            //setEvent(event);
+                            //EventViewModel eventViewModel = new ViewModelProvider((AppCompatActivity) activity).get(EventViewModel.class);
+                            //eventViewModel.setSharedEvent(this);
+                            //Log.d("Firestore", "Shared data changed: " + event);
                         //}
+                        //if (documentData != null) {
+                           //event.setEventData(documentData);      // TODO: create setEventData() in EventsManager
+                           //Log.d("Firestore", "Set event data: " + event);
+                           //setEvent(event);
+                           //Log.d("Firestore", "Set event: " + event);
+                           //EventViewModel eventViewModel = new ViewModelProvider((AppCompatActivity) activity).get(EventViewModel.class);
+                           //eventViewModel.setSharedEvent(this);
+                           //Log.d("Firestore", "Shared data changed: " + event);
 
+                        //}
                     } else {
-                        Log.d("Firestore", "No such document for get");
+                        Log.d("Firestore", "No such document for get1");
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
-            }
+            //}
         });
-        return returnEvent;
+        //return event;
     }
 
     /**

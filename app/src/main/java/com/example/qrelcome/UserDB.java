@@ -25,6 +25,7 @@ public class UserDB {
     private FirebaseFirestore db;
     private CollectionReference usersRef;
     private UserProfile returnUser;
+    private UserProfile user;
 
     public UserDB() {
         db = FirebaseFirestore.getInstance();
@@ -110,24 +111,19 @@ public class UserDB {
      */
     public UserProfile getUserInfo(String UID) {
         // The following was adapted from the firebase documentation:
-        usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        //usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        DocumentReference docRef = db.collection("Events").document(UID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         //Map<String, Object> documentData = document.getData();
-                        String uuid = document.getId();
-                        String contact = document.getString("contact");
-                        String name = document.getString("name");
-                        String imageLink = document.getString("imageLink");
-                        String homepage = document.getString("homepage");
-                        Boolean geolocationOn = document.getBoolean("geolocationOn");
-                        Boolean isAdmin = document.getBoolean("isAdmin");
+                        user = document.toObject(UserProfile.class);
 
-                        Log.d("Firestore", "User Name: " + name + " fetched");
+                        Log.d("Firestore", "DocumentSnapshot data: " + user);
 
-                        returnUser = new UserProfile(uuid, contact, name, imageLink, homepage, geolocationOn, isAdmin);
                         //assert documentData != null;
                         //returnUser.setUserProfile(documentData);
 
@@ -151,7 +147,7 @@ public class UserDB {
                 }
             }
         });
-        return returnUser;
+        return user;
     }
 
     /**

@@ -26,7 +26,7 @@ public class AttendeeHomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homescreen_attendee);
-        Toast.makeText(AttendeeHomeScreen.this, "First time7", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(AttendeeHomeScreen.this, "First time7", Toast.LENGTH_SHORT).show();
 
         preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String uuidString = preferences.getString("UUID", null);
@@ -36,7 +36,7 @@ public class AttendeeHomeScreen extends AppCompatActivity {
 
         user_db = new UserDB();
         user = user_db.getUserInfo(uid);
-        Toast.makeText(AttendeeHomeScreen.this, "First time6", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(AttendeeHomeScreen.this, "First time6", Toast.LENGTH_SHORT).show();
 
         //CheckAdmin();
         /**
