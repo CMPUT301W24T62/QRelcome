@@ -33,9 +33,7 @@ public class EventDB extends Event {
     private CollectionReference eventsRef;
     //private CollectionReference attendanceRef;
     private Activity activity;
-    private Event returnEvent = new Event();
-    private Event event;
-    String title;
+    //private Event returnEvent = new Event();
 
     public EventDB() {
         db = FirebaseFirestore.getInstance();
@@ -101,8 +99,7 @@ public class EventDB extends Event {
         // The following was adapted from the firebase documentation:
         //eventsRef.document(EID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
         DocumentReference docRef = eventsRef.document(EID);
-        Log.d("Firestore", "EID data " + EID);
-        docRef.get().addOnCompleteListener(task -> {//new OnCompleteListener<DocumentSnapshot>() {
+        docRef.get().addOnCompleteListener(task -> {
             //@Override
             //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -120,43 +117,26 @@ public class EventDB extends Event {
                             String key = entry.getKey();
                             Object value = entry.getValue();
                         }
-                        Log.d("Firestore", "Title data: " + title);
-                        //event = document.toObject(Event.class);
-                        event.setEvent(title, description, dateTime, location, attendance);
+                        event.setEvent(eid, title, description, dateTime, location, attendance);
                         Log.d("Firestore", "Event data: " + event);
                         EventViewModel eventViewModel = new ViewModelProvider((ViewModelStoreOwner) lifecycleOwner).get(EventViewModel.class);
                         eventViewModel.setSharedEvent(event);
-                        Log.d("Firestore", "Shared data changed: " + event);
+                        Log.d("Firestore", "Shared data: " + event);
 
                         //Log.d("Firestore", "DocumentSnapshot data: " + documentData);
-                        //returnEvent.setEventData(documentData);         // TODO: create setEventData() in EventsManager
 
-                        //if (event!=null){
-                            //EventStorageSingleton.getEventInstance().setEvent(event);
-                            //setEvent(event);
-                            //EventViewModel eventViewModel = new ViewModelProvider((AppCompatActivity) activity).get(EventViewModel.class);
-                            //eventViewModel.setSharedEvent(this);
-                            //Log.d("Firestore", "Shared data changed: " + event);
-                        //}
                         //if (documentData != null) {
-                           //event.setEventData(documentData);      // TODO: create setEventData() in EventsManager
-                           //Log.d("Firestore", "Set event data: " + event);
-                           //setEvent(event);
-                           //Log.d("Firestore", "Set event: " + event);
-                           //EventViewModel eventViewModel = new ViewModelProvider((AppCompatActivity) activity).get(EventViewModel.class);
-                           //eventViewModel.setSharedEvent(this);
-                           //Log.d("Firestore", "Shared data changed: " + event);
-
+                            //returnEvent.setEventData(documentData);      // TODO: create setEventData() in EventsManager
                         //}
                     } else {
-                        Log.d("Firestore", "No such document for get1");
+                        Log.d("Firestore", "No such document for get");
                     }
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
             //}
         });
-        //return event;
+        //return returnEvent;
     }
 
     /**

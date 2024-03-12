@@ -2,6 +2,8 @@ package com.example.qrelcome;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,30 +18,31 @@ import java.util.UUID;
 
 public class AttendeeHomeScreen extends AppCompatActivity {
 
-    String uid;
+    private String uid;
     private UserProfile user;
     private UserDB user_db;
     public Toolbar toolbar;
     SharedPreferences preferences;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homescreen_attendee);
-        //Toast.makeText(AttendeeHomeScreen.this, "First time7", Toast.LENGTH_SHORT).show();
 
         preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String uuidString = preferences.getString("UUID", null);
         if (uuidString != null) {
             uid = uuidString;
         };
-
-        user_db = new UserDB();
-        user = user_db.getUserInfo(uid);
-        //Toast.makeText(AttendeeHomeScreen.this, "First time6", Toast.LENGTH_SHORT).show();
-
-        //CheckAdmin();
         /**
+        user_db = new UserDB();
+        user_db.getUserInfo(uid, this);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        MutableLiveData<UserProfile> sharedUserData = (MutableLiveData<UserProfile>) userViewModel.getSharedUser();
+        UserProfile retrievedUser = sharedUserData.getValue();
+        user.setUserProfile(retrievedUser);
+
         if(user.getIsAdmin()){
             toolbar = findViewById(R.id.admin_toolbar);
         }else{
@@ -47,11 +50,12 @@ public class AttendeeHomeScreen extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
          **/
-
         ImageView MenuIcon = findViewById(R.id.menu_attendee);
         ImageView ProfileIcon = findViewById(R.id.profile_icon);
         Button BrowseEvents = findViewById(R.id.button_browse_events);
         Button ScanEvents = findViewById(R.id.button_scan_events);
+        Button AttendeeProfile = findViewById(R.id.button_attendee_profile);
+        Button OrganizerProfile = findViewById(R.id.button_organizer_profile);
 
         MenuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +77,6 @@ public class AttendeeHomeScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(AttendeeHomeScreen.this, "You clicked on Browse Events Button", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AttendeeHomeScreen.this, OrganizerHomeScreen.class);
-                startActivity(intent);
             }
         });
 
@@ -83,6 +85,22 @@ public class AttendeeHomeScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(AttendeeHomeScreen.this, "You clicked on Scan Events Button", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AttendeeHomeScreen.this, QRCodeScanner.class);
+                startActivity(intent);
+            }
+        });
+
+        AttendeeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AttendeeHomeScreen.this, "Switch to Attendee Profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        OrganizerProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AttendeeHomeScreen.this, "Switch to Organizer Profile", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AttendeeHomeScreen.this, OrganizerHomeScreen.class);
                 startActivity(intent);
             }
         });

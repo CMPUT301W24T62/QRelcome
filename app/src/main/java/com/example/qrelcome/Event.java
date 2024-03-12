@@ -27,7 +27,6 @@ public class Event {
         this.dateTime= date;
         this.location = location;
         this.attendance = new HashMap<String, Integer>();
-        this.attendance.put("this has to be changed", 1);     //Find a better solution to fix the bug
 
     }
 
@@ -57,6 +56,24 @@ public class Event {
 //        this.EID = id;
 //
 //    }
+
+    public void setEvent(Event event){
+        this.EID = event.getEID();
+        this.title = event.getTitle();
+        this.desc = event.getDesc();
+        this.dateTime = event.getDateTime();
+        this.location = event.getLocation();
+        this.attendance = event.getAttendance();
+    }
+
+    public void setEvent(String EID, String title, String description, String dateTime, String location, @Nullable HashMap<String, Integer> attendance){
+        this.EID = EID;
+        this.title = title;
+        this.desc = description;
+        this.dateTime= dateTime;
+        this.location = location;
+        this.attendance = attendance;
+    }
 
     public String getEID() {
         return this.EID;
@@ -103,28 +120,6 @@ public class Event {
     public void setAttendance(HashMap attendance){
         this.attendance = attendance;
         updateDB();
-    }
-
-    public void setFirstAttendee(String uid){
-        this.attendance = new HashMap<String, Integer>();
-        this.attendance.put(uid, 1);
-        updateDB();
-    }
-
-    public void setEvent(Event event){
-        setTitle(event.getTitle());
-        setDesc(event.getDesc());
-        setDateTime(event.getDateTime());
-        setLocation(event.getLocation());
-        setAttendance(event.getAttendance());
-    }
-
-    public void setEvent(String title, String description, String dateTime, String location, @Nullable HashMap<String, Integer> attendance){
-        this.title = title;
-        this.desc = description;
-        this.dateTime= dateTime;
-        this.location = location;
-        this.attendance = attendance;
     }
 
     public void addCheckIn(String UID){

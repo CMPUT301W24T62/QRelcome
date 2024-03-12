@@ -13,13 +13,15 @@ import java.util.UUID;
 
 public class UserProfile {
     private String uuid;
-    //private UUID uuid1;
+    //private UUID uuid;
     private String contact;
     private String name;
     private String imageLink; // stores the link to the image within the "storage" database in firebase
     private String homepage;
     private Boolean geolocationOn;
     private Boolean isAdmin;
+
+    //TODO: Add another hashmap that stores signed up events (Follows similar procedure as the attendance hashmap in Event and EventDB class)
 
     /**
     public UserProfile() {
@@ -76,7 +78,7 @@ public class UserProfile {
      * Sets the UserProfile object's data to that provided in the map
      * @param data the map storing the information to be set as the user information
      */
-    public void setUserProfile(@NonNull Map<String, Object> data) {
+    public void setUserProfileData(@NonNull Map<String, Object> data) {
         this.contact = String.valueOf(data.get("contact"));
         this.name = String.valueOf(data.get("name"));
         this.imageLink = String.valueOf(data.get("imageLink"));
@@ -85,6 +87,26 @@ public class UserProfile {
         this.isAdmin = Boolean.valueOf(String.valueOf(data.get("isAdmin")));
     }
 
+    public void setUserProfile(UserProfile user){
+        this.uuid = user.getUID();
+        this.contact = user.getContact();
+        this.name = user.getName();
+        this.imageLink = user.getImageLink();
+        this.homepage = user.getHomepage();
+        this.geolocationOn = user.getGeolocationOn();
+        this.isAdmin = user.getIsAdmin();
+    }
+
+    //This will be more useful once signed up events hashmap is created
+    public void setUserProfile(String uuid, @Nullable String contact, String name, @Nullable String imageLink, @Nullable String homepage, Boolean geolocationOn, Boolean isAdmin){
+        this.uuid = uuid;
+        this.contact = contact;
+        this.name = name;
+        this.imageLink = imageLink;
+        this.homepage = homepage;
+        this.geolocationOn = geolocationOn;
+        this.isAdmin = isAdmin;
+    }
     // GET FUNCTIONS
 
     public String getContact() {

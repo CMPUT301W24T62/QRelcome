@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.fragment_first);
-        Button createEvent = findViewById(R.id.createEventButton);
+        setContentView(R.layout.start_screen);
+        Button StartButton = findViewById(R.id.button_start);
 
         //setSupportActionBar(binding.toolbar);
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("UUID", uuid.toString());
         editor.apply();
 
-        createEvent.setOnClickListener(new View.OnClickListener() {
+        StartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AttendeeHomeScreen.class);

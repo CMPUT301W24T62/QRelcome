@@ -55,12 +55,13 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     private Preview previewUseCase;
     private ImageAnalysis analysisUseCase;
     String uid;
-    private UserProfile user;
+    private UserProfile user = new UserProfile();
     private UserDB user_db;
     private EventDB event_db;
     private Event event = new Event();
     private SharedPreferences preferences;
     private EventViewModel eventViewModel;
+    private UserViewModel userViewModel;
     //UserActivity user;
     //UserProfile profile;
     //EventDB event;
@@ -114,7 +115,6 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
         super.onDestroy();
         // Release resources used by CameraX and ML Kit Barcode Scanner
         // Release CameraX
-        //cameraProvider.unbindAll();
         stopCamera();
     }
 
@@ -296,66 +296,58 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
             Type type = new TypeToken<Map<String, String>>() {}.getType();
             Map<String, String> data = new Gson().fromJson(qrCodeData, type);
             String code = data.get("CODE");
-            Toast.makeText(this, "ok"+code, Toast.LENGTH_SHORT).show();
 
             preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             String uuidString = preferences.getString("UUID", null);
             if (uuidString != null) {
                 uid = uuidString;
             }
-            Toast.makeText(this, "ok"+uid, Toast.LENGTH_LONG).show();
 
             user_db = new UserDB();
             event_db = new EventDB();
-            Toast.makeText(this, "ok"+uid, Toast.LENGTH_SHORT).show();
 
             switch (code){
                 case "CHECK-IN":
-                    //String uid = user.getUIDString()
-                    //Toast.makeText(this, "Checked-in 4", Toast.LENGTH_SHORT).show();
                     String event_id = data.get("ID");
-                    //Toast.makeText(this, "ok"+ event_id, Toast.LENGTH_SHORT).show();
-                    //Event event = event_db.getEventInfo(event_id);
                     event_db.getEventInfo(event_id, this);
-                    Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
+
                     eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
                     MutableLiveData<Event> sharedEventData = (MutableLiveData<Event>) eventViewModel.getSharedEvent();
-                    Event event = sharedEventData.getValue();
-                    Log.d("Firestore", "Retrieved data: " + event);
+                    Event retrievedEvent = sharedEventData.getValue();
 
-                    if (event!=null){
-                        Log.d("Firestore", "Checked-in title: " + event.getTitle());
-                        Log.d("Firestore", "Checked-in attendance: " + event.getAttendance());
-                        event.addCheckIn(uid);    //bug has to be removed
-                        Log.d("Firestore", "Checked-in data: " + event);
-                        //Toast.makeText(this, "Checked-in "+ event_id, Toast.LENGTH_SHORT).show();
+                    if (retrievedEvent!=null){
+                        event.setEvent(retrievedEvent);
+                        event.addCheckIn(uid);
+                        Toast.makeText(this, "Checked-in", Toast.LENGTH_SHORT).show();
                         Intent intent_checkin = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
-                        Toast.makeText(this, "Checked-in 7", Toast.LENGTH_SHORT).show();
                         startActivity(intent_checkin);
                         //onDestroy();
                     }
                     else{
                         onResume();
                     }
-                    //Event event = EventStorageSingleton.getEventInstance().getEvent();
-                    //String title = event.getTitle();
-                    //Toast.makeText(this, "Checked-in ", Toast.LENGTH_SHORT).show();
-                    //event.addCheckIn(uid);
-                    //Toast.makeText(this, "Checked-in "+ event_id, Toast.LENGTH_SHORT).show();
-                    //Intent intent_checkin = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
-                    //Toast.makeText(this, "Checked-in 7", Toast.LENGTH_SHORT).show();
-                    //startActivity(intent_checkin);
-                    //onDestroy();
                     break;
+
                 case "PROMO":
                     Toast.makeText(this, "Promo", Toast.LENGTH_SHORT).show();
                     break;
+
                 case "QRelcome-ADMIN":
-                    user = user_db.getUserInfo(uid);
-                    user.enableAdmin();
-                    Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
-                    startActivity(intent);
+                    user_db.getUserInfo(uid, this);
+                    userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+                    MutableLiveData<UserProfile> sharedUserData = (MutableLiveData<UserProfile>) userViewModel.getSharedUser();
+                    UserProfile retrievedUser = sharedUserData.getValue();
+                    if (retrievedUser!=null){
+                        user.setUserProfile(retrievedUser);
+                        user.enableAdmin();
+                        Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
+                        startActivity(intent);
+                        //onDestroy();
+                    }
+                    else{
+                        onResume();
+                    }
                     break;
                 default:
                     System.out.println("Unknown QRCode");
@@ -365,7 +357,6 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
 
     private void stopCamera() {
         // Stop camera preview and release resources
-        //cameraProvider.unbindAll();
         if (cameraProvider != null) {
             cameraProvider.unbindAll();
             cameraProvider = null;
