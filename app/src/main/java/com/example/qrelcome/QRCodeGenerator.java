@@ -21,6 +21,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.util.HashMap;
 import java.util.Map;
 
+// ChatGPT - Consulted to write the code. Typed in "How to generate QR Codes in java using zxing library"
+// https://developers.google.com/android/reference/com/google/mlkit/vision/barcode/common/Barcode -
+// Consulted for tips to encode data before coming up with the idea to use a hashmap
+
 public class QRCodeGenerator extends AppCompatActivity {
 
     //Event event;

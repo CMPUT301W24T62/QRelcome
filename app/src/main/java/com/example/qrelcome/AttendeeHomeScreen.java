@@ -2,6 +2,7 @@ package com.example.qrelcome;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,21 +15,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qrelcome.databinding.HomescreenAttendeeBinding;
+
 import java.util.UUID;
 
 public class AttendeeHomeScreen extends AppCompatActivity {
 
     private String uid;
-    private UserProfile user;
+    private UserProfile user = new UserProfile();
     private UserDB user_db;
     public Toolbar toolbar;
     SharedPreferences preferences;
     private UserViewModel userViewModel;
-
+    private HomescreenAttendeeBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.homescreen_attendee);
+        binding = DataBindingUtil.setContentView(this, R.layout.homescreen_attendee);
 
         preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String uuidString = preferences.getString("UUID", null);
@@ -44,12 +47,13 @@ public class AttendeeHomeScreen extends AppCompatActivity {
         user.setUserProfile(retrievedUser);
 
         if(user.getIsAdmin()){
-            toolbar = findViewById(R.id.admin_toolbar);
+            binding.adminToolbar.getRoot().setVisibility(View.VISIBLE);
+            binding.defaultToolbar.getRoot().setVisibility(View.GONE);
         }else{
-            toolbar = findViewById(R.id.default_toolbar);
+            binding.adminToolbar.getRoot().setVisibility(View.GONE);
+            binding.defaultToolbar.getRoot().setVisibility(View.VISIBLE);
         }
-        setSupportActionBar(toolbar);
-         **/
+            **/
         ImageView MenuIcon = findViewById(R.id.menu_attendee);
         ImageView ProfileIcon = findViewById(R.id.profile_icon);
         Button BrowseEvents = findViewById(R.id.button_browse_events);

@@ -65,7 +65,7 @@ public class CacheUUID {
                 write.close();
                 //Toast.makeText(context, "First time1", Toast.LENGTH_SHORT).show();
                 //Sets first time user info
-                UserProfile user = new UserProfile(uuid, null, "User"+uuid, null, null, false, false);
+                UserProfile user = new UserProfile(uuid, null, "User "+uuid, null, null, false, false);
                 UserDB user_db = new UserDB();
                 user_db.addNewUserProfile(user);
                 Toast.makeText(context, "First Time User", Toast.LENGTH_SHORT).show();

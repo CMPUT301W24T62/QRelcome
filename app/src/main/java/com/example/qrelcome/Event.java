@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class Event {
     private String EID;
@@ -122,11 +123,8 @@ public class Event {
         updateDB();
     }
 
-    public void addCheckIn(String UID){
-        //if (this.attendance==null){
-            //this.attendance = new HashMap<String, Integer>();
-        //}
-        this.attendance.put(UID, (Integer)this.attendance.getOrDefault(UID, 0) + 1);
+    public void addCheckIn(String uid){
+        this.attendance.put(uid, (Integer) (this.attendance.getOrDefault(uid, 0) + 1));
         updateDB();
     }
 

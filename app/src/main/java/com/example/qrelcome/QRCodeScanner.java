@@ -44,6 +44,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// https://developers.google.com/android/reference/com/google/mlkit/vision/barcode/common/Barcode - Consulted to get started with MLKit barcode scanning
+// https://developer.android.com/codelabs/camerax-getting-started#2 - Consulted to get started with CameraX
+// https://www.youtube.com/watch?v=IrwhjDtpIU0 - Consulted to understand the different use cases of CameraX and how to implement them in java
+// https://github.com/irhammuch/android-mlkit-barcodescanner/tree/master - Consulted to write the code in java
 public class QRCodeScanner extends AppCompatActivity implements View.OnClickListener {
     Button scanButton;
     private static final String TAG = "MLKit Barcode";
@@ -340,7 +344,7 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
                     if (retrievedUser!=null){
                         user.setUserProfile(retrievedUser);
                         user.enableAdmin();
-                        Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
                         startActivity(intent);
                         //onDestroy();

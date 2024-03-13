@@ -32,7 +32,6 @@ public class EventDB extends Event {
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
     //private CollectionReference attendanceRef;
-    private Activity activity;
     //private Event returnEvent = new Event();
 
     public EventDB() {
@@ -116,6 +115,11 @@ public class EventDB extends Event {
                         for (HashMap.Entry<String, Integer> entry : attendance.entrySet()) {
                             String key = entry.getKey();
                             Object value = entry.getValue();
+                            if (value instanceof Long) {
+                                // Convert Long value to Integer
+                                Integer integerValue = ((Long) value).intValue();
+                                attendance.put(key, integerValue);
+                            }
                         }
                         event.setEvent(eid, title, description, dateTime, location, attendance);
                         Log.d("Firestore", "Event data: " + event);
