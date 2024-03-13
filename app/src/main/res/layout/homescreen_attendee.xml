@@ -1,86 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".AttendeeHomeScreen">
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar_attendee"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_browse_events"
-        android:layout_width="115dp"
-        android:layout_height="118dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@android:color/holo_purple"
-        android:text="Browse Events"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/button_scan_events"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <Button
-        android:id="@+id/button_scan_events"
-        android:layout_width="115dp"
-        android:layout_height="118dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@android:color/holo_purple"
-        android:text="Scan Events"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_browse_events"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <TextView
-        android:id="@+id/subtitle_signed_up_events"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@android:color/holo_purple"
-        android:padding="10dp"
-        android:text="My Signed Up Events"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/button_browse_events"></TextView>
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".AttendeeHomeScreen">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_attendee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_browse_events"
+            android:layout_width="115dp"
+            android:layout_height="118dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@android:color/holo_purple"
+            android:text="Browse Events"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:cornerRadius="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/button_scan_events"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
+
+        <Button
+            android:id="@+id/button_scan_events"
+            android:layout_width="115dp"
+            android:layout_height="118dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@android:color/holo_purple"
+            android:text="Scan Events"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:cornerRadius="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_browse_events"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
+
+        <TextView
+            android:id="@+id/subtitle_signed_up_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/holo_purple"
+            android:padding="10dp"
+            android:text="My Signed Up Events"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/button_browse_events"></TextView>
 
 
-    <ListView
-        android:id="@+id/signed_up_events_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/subtitle_signed_up_events" />
+        <ListView
+            android:id="@+id/signed_up_events_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/subtitle_signed_up_events" />
 
-    <include
-        android:id="@+id/default_toolbar"
-        layout="@layout/default_bottom_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-<!--
-    <include
-        android:id="@+id/admin_toolbar"
-        layout="@layout/admin_bottom_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"/>
-        -->
+        <include
+            android:id="@+id/default_toolbar"
+            layout="@layout/default_bottom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+            <!--android:visibility="gone"-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/admin_toolbar"
+            layout="@layout/admin_bottom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

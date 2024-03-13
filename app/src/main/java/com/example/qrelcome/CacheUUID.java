@@ -63,16 +63,16 @@ public class CacheUUID {
                 write.write(uuid);
                 //write.write(UUID.randomUUID().toString());
                 write.close();
-                Toast.makeText(context, "First time1", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "First time1", Toast.LENGTH_SHORT).show();
                 //Sets first time user info
-                UserProfile user = new UserProfile(uuid, null, "User"+uuid, null, null, false, false);
+                UserProfile user = new UserProfile(uuid, null, "User "+uuid, null, null, false, false);
                 UserDB user_db = new UserDB();
                 user_db.addNewUserProfile(user);
-                Toast.makeText(context, "First time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "First Time User", Toast.LENGTH_SHORT).show();
             }
             else {
 
-                Toast.makeText(context, "Second time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Old User", Toast.LENGTH_SHORT).show();
             }
             gottenUUID = true;
 

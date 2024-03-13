@@ -10,6 +10,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -41,6 +44,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// https://developers.google.com/android/reference/com/google/mlkit/vision/barcode/common/Barcode - Consulted to get started with MLKit barcode scanning
+// https://developer.android.com/codelabs/camerax-getting-started#2 - Consulted to get started with CameraX
+// https://www.youtube.com/watch?v=IrwhjDtpIU0 - Consulted to understand the different use cases of CameraX and how to implement them in java
+// https://github.com/irhammuch/android-mlkit-barcodescanner/tree/master - Consulted to write the code in java
 public class QRCodeScanner extends AppCompatActivity implements View.OnClickListener {
     Button scanButton;
     private static final String TAG = "MLKit Barcode";
@@ -52,11 +59,13 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     private Preview previewUseCase;
     private ImageAnalysis analysisUseCase;
     String uid;
-    private UserProfile user;
+    private UserProfile user = new UserProfile();
     private UserDB user_db;
     private EventDB event_db;
-    private Event event;
+    private Event event = new Event();
     private SharedPreferences preferences;
+    private EventViewModel eventViewModel;
+    private UserViewModel userViewModel;
     //UserActivity user;
     //UserProfile profile;
     //EventDB event;
@@ -75,8 +84,12 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
         scanButton = findViewById(R.id.button_scan);
         scanButton.setOnClickListener(this);
         previewView = findViewById(R.id.preview_view);
-        user_db = new UserDB();
-        event_db = new EventDB();
+        //startCamera();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startCamera();
     }
 
     /**
@@ -86,8 +99,27 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        //user.SetDefaultUser();
         startCamera();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopCamera();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopCamera();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Release resources used by CameraX and ML Kit Barcode Scanner
+        // Release CameraX
+        stopCamera();
     }
 
     /**
@@ -261,50 +293,77 @@ public class QRCodeScanner extends AppCompatActivity implements View.OnClickList
      * TODO: java docs
      * @param qrcodes The list of qrcodes scanned?
      */
-    private void onSuccess(List<Barcode> qrcodes) {            //TODO: Return raw value of QR Code
+    private void onSuccess(List<Barcode> qrcodes) {
         if (qrcodes.size() > 0) {
+            onPause();
             String qrCodeData = qrcodes.get(0).getRawValue();
             Type type = new TypeToken<Map<String, String>>() {}.getType();
             Map<String, String> data = new Gson().fromJson(qrCodeData, type);
             String code = data.get("CODE");
-            Toast.makeText(this, "Checked-in 1", Toast.LENGTH_SHORT).show();
 
             preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             String uuidString = preferences.getString("UUID", null);
             if (uuidString != null) {
                 uid = uuidString;
             }
-            Toast.makeText(this, uid, Toast.LENGTH_SHORT).show();
+
+            user_db = new UserDB();
+            event_db = new EventDB();
 
             switch (code){
                 case "CHECK-IN":
-                    //String uid = user.getUIDString()
-                    Toast.makeText(this, "Checked-in 4", Toast.LENGTH_SHORT).show();
                     String event_id = data.get("ID");
-                    Toast.makeText(this, event_id, Toast.LENGTH_SHORT).show();
-                    Event event = event_db.getEventInfo(event_id);
-                    Toast.makeText(this, "Checked-in 6" , Toast.LENGTH_SHORT).show();
-                    String name = event.getTitle();
-                    Toast.makeText(this, "Checked-in 6"+name , Toast.LENGTH_LONG).show();
-                    event.addCheckIn(uid);
-                    Toast.makeText(this, "Checked-in "+ event_id, Toast.LENGTH_LONG).show();
-                    Intent intent_checkin = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
-                    Toast.makeText(this, "Checked-in 7", Toast.LENGTH_SHORT).show();
-                    startActivity(intent_checkin);
+                    event_db.getEventInfo(event_id, this);
+
+                    eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
+                    MutableLiveData<Event> sharedEventData = (MutableLiveData<Event>) eventViewModel.getSharedEvent();
+                    Event retrievedEvent = sharedEventData.getValue();
+
+                    if (retrievedEvent!=null){
+                        event.setEvent(retrievedEvent);
+                        event.addCheckIn(uid);
+                        Toast.makeText(this, "Checked-in", Toast.LENGTH_SHORT).show();
+                        Intent intent_checkin = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
+                        startActivity(intent_checkin);
+                        //onDestroy();
+                    }
+                    else{
+                        onResume();
+                    }
                     break;
+
                 case "PROMO":
                     Toast.makeText(this, "Promo", Toast.LENGTH_SHORT).show();
                     break;
+
                 case "QRelcome-ADMIN":
-                    user = user_db.getUserInfo(uid);
-                    user.enableAdmin();
-                    Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
-                    startActivity(intent);
+                    user_db.getUserInfo(uid, this);
+                    userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+                    MutableLiveData<UserProfile> sharedUserData = (MutableLiveData<UserProfile>) userViewModel.getSharedUser();
+                    UserProfile retrievedUser = sharedUserData.getValue();
+                    if (retrievedUser!=null){
+                        user.setUserProfile(retrievedUser);
+                        user.enableAdmin();
+                        Toast.makeText(this, "Congratulations!! You are now an Admin", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(QRCodeScanner.this,  AttendeeHomeScreen.class);
+                        startActivity(intent);
+                        //onDestroy();
+                    }
+                    else{
+                        onResume();
+                    }
                     break;
                 default:
                     System.out.println("Unknown QRCode");
             }
+        }
+    }
+
+    private void stopCamera() {
+        // Stop camera preview and release resources
+        if (cameraProvider != null) {
+            cameraProvider.unbindAll();
+            cameraProvider = null;
         }
     }
 

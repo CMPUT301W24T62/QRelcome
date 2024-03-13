@@ -4,6 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,7 +28,7 @@ import java.util.Map;
 public class UserDB {
     private FirebaseFirestore db;
     private CollectionReference usersRef;
-    private UserProfile returnUser;
+    //private UserProfile returnUser;
 
     public UserDB() {
         db = FirebaseFirestore.getInstance();
@@ -108,26 +112,33 @@ public class UserDB {
      * @param UID the String userName of the UserProfile whose information is to be collected
      * @return the UserProfile object with all fields filled in as seen currently in the database
      */
-    public UserProfile getUserInfo(String UID) {
+    public void getUserInfo(String UID, LifecycleOwner lifecycleOwner) {
+        UserProfile user = new UserProfile();
+        DocumentReference docRef = usersRef.document(UID);
         // The following was adapted from the firebase documentation:
-        usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        //usersRef.document(UID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRef.get().addOnCompleteListener(task -> {
+            //@Override
+            //public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    Log.d("Firestore", "DocumentSnapshot data: " + document);
                     if (document.exists()) {
                         //Map<String, Object> documentData = document.getData();
-                        String uuid = document.getId();
+                        String uuid = document.getString("uuid");
                         String contact = document.getString("contact");
                         String name = document.getString("name");
                         String imageLink = document.getString("imageLink");
                         String homepage = document.getString("homepage");
                         Boolean geolocationOn = document.getBoolean("geolocationOn");
                         Boolean isAdmin = document.getBoolean("isAdmin");
+                        user.setUserProfile(uuid, contact, name, imageLink, homepage, geolocationOn, isAdmin);
+                        Log.d("Firestore", "User data: " + user);
+                        UserViewModel userViewModel = new ViewModelProvider((ViewModelStoreOwner) lifecycleOwner).get(UserViewModel.class);
+                        userViewModel.setSharedUser(user);
+                        Log.d("Firestore", "Shared data: " + user);
 
-                        Log.d("Firestore", "User Name: " + name + " fetched");
-
-                        returnUser = new UserProfile(uuid, contact, name, imageLink, homepage, geolocationOn, isAdmin);
+                        //Log.d("Firestore", "DocumentSnapshot data: " + user);
                         //assert documentData != null;
                         //returnUser.setUserProfile(documentData);
 
@@ -149,9 +160,8 @@ public class UserDB {
                 } else {
                     Log.d("Firestore", "get failed with ", task.getException());
                 }
-            }
+            //}
         });
-        return returnUser;
     }
 
     /**

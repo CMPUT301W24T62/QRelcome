@@ -1,10 +1,13 @@
 package com.example.qrelcome;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 public class Event {
     private String EID;
@@ -50,11 +53,28 @@ public class Event {
         this.EID = (String) data.get("documentID");
     }
 
-
 //    public void setEID(String id) {
 //        this.EID = id;
 //
 //    }
+
+    public void setEvent(Event event){
+        this.EID = event.getEID();
+        this.title = event.getTitle();
+        this.desc = event.getDesc();
+        this.dateTime = event.getDateTime();
+        this.location = event.getLocation();
+        this.attendance = event.getAttendance();
+    }
+
+    public void setEvent(String EID, String title, String description, String dateTime, String location, @Nullable HashMap<String, Integer> attendance){
+        this.EID = EID;
+        this.title = title;
+        this.desc = description;
+        this.dateTime= dateTime;
+        this.location = location;
+        this.attendance = attendance;
+    }
 
     public String getEID() {
         return this.EID;
@@ -98,8 +118,13 @@ public class Event {
 
     public HashMap getAttendance() {return this.attendance;}
 
-    public void addCheckIn(String UID){
-        this.attendance.put(UID, (Integer)this.attendance.getOrDefault(UID, 0) + 1);
+    public void setAttendance(HashMap attendance){
+        this.attendance = attendance;
+        updateDB();
+    }
+
+    public void addCheckIn(String uid){
+        this.attendance.put(uid, (Integer) (this.attendance.getOrDefault(uid, 0) + 1));
         updateDB();
     }
 
